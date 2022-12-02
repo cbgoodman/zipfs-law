@@ -1,20 +1,20 @@
 library(tidyverse)
 
 # read in data
-msa <- read.csv("msapop.csv")
+msa <- read.csv("msapop2020.csv")
 # create new data to conform with Gabaix (1999)
 msa135 <- msa %>%
-  filter(rank2010<=135)
+  filter(rankpop20<=135)
 
 # plot -- all MSAs
 p <- ggplot(msa)+
-  aes(x = log(pop2010), y = log(rank2010))+
+  aes(x = log(pop20), y = log(rankpop20))+
   geom_point(alpha = 0.5, size = 2, color = "#E69F00") +
   geom_smooth(method = "lm", se = FALSE, size=0.5, color="#2b2b2b", alpha=0.5) +
   # Theming
   labs(
     title="Zipf's law",
-    subtitle="Log population and log population rank, All U.S. metropolitan areas, 2010",
+    subtitle="Log population and log population rank, All U.S. metropolitan areas, 2020",
     caption="Author: Chris Goodman (@cbgoodman), Data: U.S. Census Bureau & Author's calculations.",
     y="Log of Rank",
     x="Log of Population") +
@@ -48,11 +48,11 @@ p <- ggplot(msa)+
   theme(plot.caption=element_text(size=8, hjust=0, margin=margin(t=15)))
 ggsave(plot=p, "zipf.png", width=8, height=6, units="in", dpi="retina")
 
-summary(lm(data=msa, log(rank2010)~log(pop2010)))
+summary(lm(data=msa, log(rankpop20)~log(pop20)))
 
 # plot -- 135 largest
 p1 <- ggplot(msa135) +
-  aes(x = log(pop2010), y = log(rank2010)) +
+  aes(x = log(pop20), y = log(rankpop20)) +
   # points
   geom_point(alpha = 0.5, size = 2, color = "#E69F00") +
   # point labels for the largest cities -- still deciding
@@ -62,11 +62,11 @@ p1 <- ggplot(msa135) +
   # theming
   labs(
     title="Zipf's law",
-    subtitle="Log population and log population rank, 135 largest U.S. metropolitan areas, 2010",
+    subtitle="Log population and log population rank, 135 largest U.S. metropolitan areas, 2020",
     caption="Author: Chris Goodman (@cbgoodman), Data: U.S. Census Bureau & Author's calculations.",
     y="Log of Rank",
     x="Log of Population") +
-  theme_minimal(base_family="Open Sans Condensed Light") +
+  theme_minimal(base_family="Public Sans Light") +
   # light, dotted major y-grid lines only
   theme(panel.grid=element_line())+
   theme(panel.grid.major.y=element_line(color="#2b2b2b", linetype="dotted", size=0.15))+
@@ -90,10 +90,10 @@ p1 <- ggplot(msa135) +
   theme(axis.text.y=element_text(margin=margin(r=-5)))+
   theme(axis.text.x=element_text(margin=margin(r=-5)))+
   # make the plot title bold and modify the bottom margin a bit
-  theme(plot.title=element_text(family="Open Sans Condensed Bold", margin=margin(b=15)))+
+  theme(plot.title=element_text(family="Public Sans SemiBold", margin=margin(b=15)))+
   # make the subtitle italic
-  theme(plot.subtitle=element_text(family="Open Sans Condensed Light Italic"))+
+  theme(plot.subtitle=element_text(family="Public Sans Light Italic"))+
   theme(plot.caption=element_text(size=8, hjust=0, margin=margin(t=15)))
-ggsave(plot=p1, "zipf135.png", width=8, height=6, units="in", dpi="retina")
+ggsave(plot=p1, "zipf135_20.png", width=8, height=6, units="in", dpi="retina")
 
 summary(lm(data=msa135, log(rank2010)~log(pop2010)))
